@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Премия 2024</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🏆Премия НеСлэйск 2к25</h1>
+            <p class="subtitle">Выберите лучших в каждой из номинаций: результаты уже 3 декабря</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="nominations-section">
+                <h2>Номинации</h2>
+                <div class="nominations-grid" id="nominationsGrid">
+                    <!-- Номинации будут добавлены через JavaScript -->
+                </div>
+            </section>
+
+            <section class="testimonials-section">
+                <h2>О нас пишут</h2>
+                <div class="testimonials-grid">
+                    <div class="testimonial-item">
+                        <div class="testimonial-content">
+                            <div class="testimonial-image">
+                                <img src="https://kras.kassy.ru/media/9d/9d4dfdf5f10fdbcd158a6939e3b46e46-23631_src.jpg" alt="Участник 1" class="participant-photo">
+                            </div>
+                            <div class="testimonial-quote">
+                                <p class="quote-text">"Е*ать, я тут выступлю! Тупа Даблю темка!"</p>
+                                <p class="quote-author">— Бушидо Жо</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-item">
+                        <div class="testimonial-content">
+                            <div class="testimonial-image">
+                                <img src="https://images.cybersport.ru/images/og-jpg/plain/b6/b67f94cc-0f46-47c5-9950-527808c71af2.png" alt="Участник 2" class="participant-photo">
+                            </div>
+                            <div class="testimonial-quote">
+                                <p class="quote-text">"Вливаю нах*й на пох*й, держите мои 30 млн долляров"</p>
+                                <p class="quote-author">— Эвелон</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-item">
+                        <div class="testimonial-content">
+                            <div class="testimonial-image">
+                                <img src="https://avatars.mds.yandex.net/i?id=2d0d41500b66ba267335433eb9b74910-4566567-images-thumbs&n=13" alt="Участник 3" class="participant-photo">
+                            </div>
+                            <div class="testimonial-quote">
+                                <p class="quote-text">"Х*йня"</p>
+                                <p class="quote-author">— Клим Жуков</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="sponsors-section">
+                <h2>Спонсоры</h2>
+                <div class="sponsors-grid">
+                    <div class="sponsor-item">
+                        <img src="https://i.pinimg.com/originals/9d/14/57/9d14570603293c03e2c5846cd1052c4f.png" alt="Спонсор 1" class="sponsor-image">
+                    </div>
+                    <div class="sponsor-item">
+                        <img src="https://repository-images.githubusercontent.com/882204607/d30bd94d-d64a-41f8-8cd4-dceb3f01d415" alt="Спонсор 2" class="sponsor-image">
+                    </div>
+                    <div class="sponsor-item">
+                        <img src="https://avatars.yandex.net/get-music-content/14304155/d32da6c0.a.38887995-1/m1000x1000" alt="Спонсор 3" class="sponsor-image">
+                    </div>
+                    <div class="sponsor-item">
+                        <img src="https://avatars.mds.yandex.net/i?id=a6473d8e99779312cff7a2a5a90542f4344ed867-4210949-images-thumbs&n=13" alt="Спонсор 4" class="sponsor-image">
+                    </div>
+                    <div class="sponsor-item">
+                        <img src="https://images.wondershare.com/images/play/toplist-a25-6.png" alt="Спонсор 5" class="sponsor-image">
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#" class="footer-link">License: MIT</a>
+                <span class="footer-separator">|</span>
+                <a href="#" class="footer-link">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно для голосования -->
+    <div class="modal" id="voteModal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <div class="vote-info-banner" id="voteInfoBanner" style="display: none;">
+                <span class="info-icon">ℹ️</span>
+                <span>Можно изменить голос, нажав крестик
+                | * - Иноагенты в РФ
+                | ©НеСлэйск</span>
+            </div>
+            <div class="candidates-list" id="candidatesList">
+                <!-- Претенденты будут добавлены через JavaScript -->
+            </div>
+            <div class="vote-result" id="voteResult"></div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для просмотра изображения -->
+    <div class="image-modal" id="imageModal">
+        <span class="image-close" id="imageClose">&times;</span>
+        <img id="enlargedImage" src="" alt="Увеличенное изображение">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

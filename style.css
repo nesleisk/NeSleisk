@@ -673,6 +673,39 @@ footer {
     height: 20px;
 }
 
+.twitch-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: #9146FF;
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.candidate-item:hover .twitch-button,
+.candidate-item.voted .twitch-button {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.twitch-button:hover {
+    background: #772CE8;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(145, 70, 255, 0.4);
+}
+
+.twitch-button svg {
+    width: 20px;
+    height: 20px;
+}
+
 /* Праздничные эффекты - конфетти */
 .confetti {
     position: absolute;
@@ -954,6 +987,16 @@ footer {
     }
     
     .youtube-button svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .twitch-button {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .twitch-button svg {
         width: 18px;
         height: 18px;
     }

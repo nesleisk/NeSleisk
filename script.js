@@ -114,7 +114,30 @@ document.addEventListener('DOMContentLoaded', function() {
     renderNominations();
     initializeModal();
     loadVotes();
+    initializeWButton();
 });
+
+// Инициализация кнопки W
+function initializeWButton() {
+    const wButton = document.getElementById('wButton');
+    if (wButton) {
+        wButton.addEventListener('click', function() {
+            // Анимация нажатия
+            wButton.classList.add('animate');
+            
+            // Воспроизведение звука
+            const audio = new Audio('https://soundinstants.com/sound/w-sound');
+            audio.play().catch(e => {
+                console.log('Не удалось воспроизвести звук:', e);
+            });
+            
+            // Удаление класса анимации после завершения
+            setTimeout(() => {
+                wButton.classList.remove('animate');
+            }, 300);
+        });
+    }
+}
 
 // Отображение номинаций
 function renderNominations() {

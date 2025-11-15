@@ -25,22 +25,94 @@ body {
 }
 
 header {
-    background: rgba(255, 255, 255, 0.95);
+    background-image: url('https://i.ytimg.com/vi/a4nPcgrlhlo/maxresdefault.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.95);
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
     padding: 40px 0;
     text-align: center;
     margin-bottom: 50px;
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 0;
+}
+
+header .container {
+    position: relative;
+    z-index: 1;
+}
+
+.w-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ea6666 0%, #f82104 100%);
+    border: 3px solid white;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.w-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.w-button:active {
+    transform: scale(0.9);
+}
+
+.w-button.animate {
+    animation: wButtonClick 0.3s ease;
+}
+
+@keyframes wButtonClick {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.8) rotate(10deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
 }
 
 header h1 {
     font-size: 3em;
     color: #667eea;
     margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
 }
 
 .subtitle {
     font-size: 1.2em;
     color: #666;
+    position: relative;
+    z-index: 1;
 }
 
 main {
@@ -750,8 +822,21 @@ footer {
         grid-template-columns: 1fr;
     }
     
+    header {
+        padding: 30px 0;
+    }
+    
     header h1 {
         font-size: 2em;
+        padding-right: 60px;
+    }
+    
+    .w-button {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        top: 15px;
+        right: 15px;
     }
     
     .nominations-section {

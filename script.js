@@ -145,11 +145,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (headerSubtitle) {
         wrapLetters(headerSubtitle);
     }
-<<<<<<< Updated upstream
 });
-=======
 
-    });
+
 
 // Инициализация 3D паралакс эффекта для заголовка
 function initialize3DParallax(element) {
@@ -260,7 +258,7 @@ function createAnimationGif(x, y) {
         }, 500);
     }, 2000);
 }
->>>>>>> Stashed changes
+
 
 // Инициализация 3D паралакс эффекта для заголовка
 function initialize3DParallax(element) {

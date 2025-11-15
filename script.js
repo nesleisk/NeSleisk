@@ -729,4 +729,8 @@ function initializeTrainText() {
         requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
+
 }
+
+
+

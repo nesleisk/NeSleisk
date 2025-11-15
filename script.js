@@ -109,13 +109,151 @@ const nominations = [
     }
 ];
 
+// Функция для обертки букв в span элементы
+function wrapLetters(element) {
+    if (!element) return;
+    
+    const text = element.textContent;
+    const wrappedText = text.split('').map((char, index) => {
+        // Если это пробел или невидимый символ, оставляем как есть
+        if (char.trim() === '') {
+            return char;
+        }
+        // Обертываем каждую букву (и эмодзи) в span
+        return `<span class="letter">${char}</span>`;
+    }).join('');
+    
+    element.innerHTML = wrappedText;
+}
+
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     renderNominations();
     initializeModal();
     loadVotes();
     initializeWButton();
+    
+    // Обертываем буквы в заголовках header
+    const headerTitle = document.querySelector('.header-title');
+    const headerSubtitle = document.querySelector('.header-subtitle');
+    
+    if (headerTitle) {
+        wrapLetters(headerTitle);
+        initialize3DParallax(headerTitle);
+        initializeHeaderClickEffect(headerTitle);
+    }
+    if (headerSubtitle) {
+        wrapLetters(headerSubtitle);
+    }
 });
+
+// Инициализация 3D паралакс эффекта для заголовка
+function initialize3DParallax(element) {
+    if (!element) return;
+    
+    const header = document.querySelector('header');
+    if (!header) return;
+    
+    header.addEventListener('mousemove', function(e) {
+        const rect = header.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        const mouseX = e.clientX - centerX;
+        const mouseY = e.clientY - centerY;
+        
+        const maxTilt = 15;
+        const tiltX = (mouseY / (rect.height / 2)) * maxTilt;
+        const tiltY = (mouseX / (rect.width / 2)) * maxTilt * -1;
+        
+        const depth = 50;
+        const translateZ = Math.min(Math.abs(mouseX) + Math.abs(mouseY), depth) * 0.3;
+        
+        element.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(${translateZ}px)`;
+    });
+    
+    header.addEventListener('mouseleave', function() {
+        element.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+    });
+}
+
+// Инициализация эффекта взрыва при клике на заголовок
+function initializeHeaderClickEffect(element) {
+    if (!element) return;
+    
+    element.addEventListener('click', function(e) {
+        const rect = element.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        // Создаем частицы взрыва
+        createExplosionParticles(centerX, centerY);
+        
+        // Создаем анимацию (gif)
+        createAnimationGif(centerX, centerY);
+    });
+}
+
+// Создание частиц взрыва
+function createExplosionParticles(x, y) {
+    const particlesContainer = document.createElement('div');
+    particlesContainer.className = 'explosion-particles';
+    particlesContainer.style.left = x + 'px';
+    particlesContainer.style.top = y + 'px';
+    document.body.appendChild(particlesContainer);
+    
+    const particleCount = 30;
+    const colors = ['#ffd93d', '#ff6b6b', '#4ecdc4', '#45b7d1', '#ffa07a'];
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        const angle = (Math.PI * 2 * i) / particleCount;
+        const distance = 50 + Math.random() * 100;
+        const tx = Math.cos(angle) * distance;
+        const ty = Math.sin(angle) * distance;
+        
+        particle.style.setProperty('--tx', tx + 'px');
+        particle.style.setProperty('--ty', ty + 'px');
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.width = (6 + Math.random() * 6) + 'px';
+        particle.style.height = particle.style.width;
+        
+        particlesContainer.appendChild(particle);
+    }
+    
+    // Удаляем контейнер после анимации
+    setTimeout(() => {
+        particlesContainer.remove();
+    }, 800);
+}
+
+// Создание анимации (gif) около текста
+function createAnimationGif(x, y) {
+    // Используем популярный URL для gif анимации или можно заменить на свой
+    const gifUrl = 'https://media1.tenor.com/m/5aJlJQ6DJlgAAAAd/ai-slop-tung-tung-sahur.gif';
+    
+    const gifContainer = document.createElement('img');
+    gifContainer.className = 'animation-gif';
+    gifContainer.src = gifUrl;
+    gifContainer.alt = 'Celebration';
+    gifContainer.style.width = '150px';
+    gifContainer.style.height = '150px';
+    gifContainer.style.left = (x - 75) + 'px';
+    gifContainer.style.top = (y - 75) + 'px';
+    
+    document.body.appendChild(gifContainer);
+    
+    // Удаляем анимацию через 2 секунды
+    setTimeout(() => {
+        gifContainer.style.opacity = '0';
+        gifContainer.style.transform = 'scale(0) rotate(360deg)';
+        setTimeout(() => {
+            gifContainer.remove();
+        }, 500);
+    }, 2000);
+}
 
 // Инициализация кнопки W
 function initializeWButton() {
@@ -147,10 +285,39 @@ function renderNominations() {
     nominations.forEach(nomination => {
         const card = document.createElement('div');
         card.className = 'nomination-card';
-        card.innerHTML = `
-            <h3>${nomination.title}</h3>
-            <p>${nomination.description}</p>
-        `;
+        
+        // Проверяем, проголосовал ли пользователь за эту номинацию
+        const userVote = getUserVote(nomination.id);
+        
+        if (userVote) {
+            // Находим выбранного кандидата
+            const selectedCandidate = nomination.candidates.find(c => c.id === userVote);
+            
+            if (selectedCandidate && selectedCandidate.image) {
+                // Карточка с голосом - показываем имя кандидата и размытое изображение
+                card.classList.add('voted-card');
+                const imageUrl = selectedCandidate.image;
+                card.innerHTML = `
+                    <div class="card-blur-bg" style="background-image: url('${imageUrl}');"></div>
+                    <div class="card-overlay"></div>
+                    <h3>${nomination.title}</h3>
+                    <p class="selected-candidate">${selectedCandidate.name}</p>
+                `;
+            } else {
+                // Если кандидат не найден или нет изображения, показываем стандартное
+                card.innerHTML = `
+                    <h3>${nomination.title}</h3>
+                    <p>${selectedCandidate ? selectedCandidate.name : nomination.description}</p>
+                `;
+            }
+        } else {
+            // Обычная карточка без голоса
+            card.innerHTML = `
+                <h3>${nomination.title}</h3>
+                <p>${nomination.description}</p>
+            `;
+        }
+        
         card.addEventListener('click', () => openVoteModal(nomination));
         grid.appendChild(card);
     });
@@ -251,6 +418,7 @@ function openVoteModal(nomination) {
                     // Первое голосование
                     voteForCandidate(nomination.id, candidate.id);
                     loadVotes();
+                    renderNominations(); // Обновляем карточки номинаций
                     openVoteModal(nomination); // Обновляем модальное окно
                     showVoteResult(candidate.name);
                     createCelebrationEffects();
@@ -352,6 +520,9 @@ function cancelVote(nominationId, candidateId) {
         }
         localStorage.setItem('votes', JSON.stringify(votes));
     }
+    
+    // Обновляем карточки номинаций
+    renderNominations();
     
     // Находим текущую номинацию и обновляем модальное окно
     const currentNomination = nominations.find(n => n.id === nominationId);

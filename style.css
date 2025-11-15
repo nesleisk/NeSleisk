@@ -80,7 +80,7 @@ header .container {
     z-index: 10;
     position: relative;
 }
-
+/*e*/
 .social-icon {
     width: 40px;
     height: 40px;
@@ -1436,4 +1436,3 @@ footer {
         font-size: 35px;
     }
 }
-

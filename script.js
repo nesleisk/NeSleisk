@@ -147,6 +147,119 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+
+
+// Инициализация 3D паралакс эффекта для заголовка
+function initialize3DParallax(element) {
+    if (!element) return;
+    
+    const header = document.querySelector('header');
+    if (!header) return;
+    
+    header.addEventListener('mousemove', function(e) {
+        const rect = header.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        const mouseX = e.clientX - centerX;
+        const mouseY = e.clientY - centerY;
+        
+        const maxTilt = 15;
+        const tiltX = (mouseY / (rect.height / 2)) * maxTilt;
+        const tiltY = (mouseX / (rect.width / 2)) * maxTilt * -1;
+        
+        const depth = 50;
+        const translateZ = Math.min(Math.abs(mouseX) + Math.abs(mouseY), depth) * 0.3;
+        
+        const scale = 1.03 + Math.min(Math.hypot(mouseX, mouseY) / Math.hypot(rect.width/2, rect.height/2), 1) * 0.03;
+        
+        element.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(${translateZ}px) scale(${scale})`;
+    });
+    
+    header.addEventListener('mouseleave', function() {
+        element.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0) scale(1)';
+    });
+}
+
+// Инициализация эффекта взрыва при клике на заголовок
+function initializeHeaderClickEffect(element) {
+    if (!element) return;
+    
+    element.addEventListener('click', function(e) {
+        const rect = element.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        // Создаем частицы взрыва
+        createExplosionParticles(centerX, centerY);
+        
+        // Создаем анимацию (gif)
+        createAnimationGif(centerX, centerY);
+    });
+}
+
+// Создание частиц взрыва
+function createExplosionParticles(x, y) {
+    const particlesContainer = document.createElement('div');
+    particlesContainer.className = 'explosion-particles';
+    particlesContainer.style.left = x + 'px';
+    particlesContainer.style.top = y + 'px';
+    document.body.appendChild(particlesContainer);
+    
+    const particleCount = 30;
+    const colors = ['#ffd93d', '#ff6b6b', '#4ecdc4', '#45b7d1', '#ffa07a'];
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        const angle = (Math.PI * 2 * i) / particleCount;
+        const distance = 50 + Math.random() * 100;
+        const tx = Math.cos(angle) * distance;
+        const ty = Math.sin(angle) * distance;
+        
+        particle.style.setProperty('--tx', tx + 'px');
+        particle.style.setProperty('--ty', ty + 'px');
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.width = (6 + Math.random() * 6) + 'px';
+        particle.style.height = particle.style.width;
+        
+        particlesContainer.appendChild(particle);
+    }
+    
+    // Удаляем контейнер после анимации
+    setTimeout(() => {
+        particlesContainer.remove();
+    }, 800);
+}
+
+// Создание анимации (gif) около текста
+function createAnimationGif(x, y) {
+    // Используем популярный URL для gif анимации или можно заменить на свой
+    const gifUrl = 'https://media1.tenor.com/m/5aJlJQ6DJlgAAAAd/ai-slop-tung-tung-sahur.gif';
+    
+    const gifContainer = document.createElement('img');
+    gifContainer.className = 'animation-gif';
+    gifContainer.src = gifUrl;
+    gifContainer.alt = 'Celebration';
+    gifContainer.style.width = '150px';
+    gifContainer.style.height = '150px';
+    gifContainer.style.left = (x - 75) + 'px';
+    gifContainer.style.top = (y - 75) + 'px';
+    
+    document.body.appendChild(gifContainer);
+    
+    // Удаляем анимацию через 2 секунды
+    setTimeout(() => {
+        gifContainer.style.opacity = '0';
+        gifContainer.style.transform = 'scale(0) rotate(360deg)';
+        setTimeout(() => {
+            gifContainer.remove();
+        }, 500);
+    }, 2000);
+}
+
+
 // Инициализация 3D паралакс эффекта для заголовка
 function initialize3DParallax(element) {
     if (!element) return;
@@ -473,7 +586,7 @@ function loadVotes() {
 // Показ результата голосования
 function showVoteResult(candidateName) {
     const voteResult = document.getElementById('voteResult');
-    voteResult.innerHTML = `<span class="celebration-emoji">🎉</span> Спасибо! Вы проголосовали за "${candidateName}" <span class="celebration-emoji">🎉</span>`;
+    voteResult.innerHTML = `<span class="celebration-emoji">🎉</span> Вы проголосовали за "${candidateName}" <span class="celebration-emoji">🎉</span>`;
     voteResult.classList.add('show');
     
     setTimeout(() => {
@@ -571,3 +684,49 @@ function openImageModal(imageSrc, candidateName) {
     imageModal.classList.add('show');
 }
 
+// Простой текст для поезда
+function initializeTrainText() {
+    const train = document.getElementById('trainGif');
+    const textEl = document.getElementById('trainText');
+    if (!train || !textEl) return;
+
+    const phrases = [
+        'между нами аи слоп',
+        'и теперь мы потонем в нем',
+        'и теперь мы аи чунгурики'
+    ];
+    let idx = 0;
+    let lastSwitch = 0;
+
+    function loop(ts) {
+        const wrapper = train.closest('.train-wrapper');
+        if (wrapper) {
+            const trainRect = train.getBoundingClientRect();
+            const wrapperRect = wrapper.getBoundingClientRect();
+            const intersectX = Math.min(trainRect.right, wrapperRect.right) - Math.max(trainRect.left, wrapperRect.left);
+            const visible = intersectX > 0; // видим ли поезд в пределах wrapper
+
+            // позиция текста: чуть правее середины поезда
+            const left = Math.max(0, trainRect.left - wrapperRect.left + Math.min(trainRect.width * 0.5, 140));
+            textEl.style.left = left + 'px';
+
+            if (visible) {
+                textEl.classList.add('show');
+                if (!textEl.textContent) {
+                    textEl.textContent = phrases[idx % phrases.length];
+                    lastSwitch = ts;
+                }
+                if (ts - lastSwitch > 1800) {
+                    idx++;
+                    textEl.textContent = phrases[idx % phrases.length];
+                    lastSwitch = ts;
+                }
+            } else {
+                textEl.classList.remove('show');
+                textEl.textContent = '';
+            }
+        }
+        requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+}

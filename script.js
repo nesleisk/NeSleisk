@@ -240,7 +240,7 @@ function openVoteModal(nomination) {
         `;
         
         candidateItem.addEventListener('click', () => {
-            // Если пользователь уже проголосовал, блокируем переголосование
+            // Если пользователь уже проголосовал блокируем переголосование
             if (userVote && userVote !== candidate.id) {
                 return; // Не позволяем переголосовать
             }
